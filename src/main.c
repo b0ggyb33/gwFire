@@ -1,9 +1,8 @@
 #include <pebble.h>
-#include <src/Actors.h>
+#include "Actors.h"
 #include "main.h"
 #include "JavascriptInterface.h"
 #include "Game.h"
-
 #ifdef PBL_COLOR
   #define BACKGROUND_COLOUR GColorLimerick
 #else
@@ -13,7 +12,7 @@
 Window *my_window;
 static GBitmap *s_background;
 static GBitmap *s_mgw_left, *s_mgw_middle, *s_mgw_right;
-static GBitmap *s_crash_left, *s_crash_right;
+static GBitmap *s_crash_left, *s_crash_middle, *s_crash_right;
 
 static GBitmap *BMPfire0, *BMPfire1, *BMPfire2, *BMPfire3;
 
@@ -28,8 +27,11 @@ static TextLayer *nameLayer;
 static TextLayer *restartTextLayer;
 
 static char scoreString[10];
-static char highScoreString[10];
 static char friendlyNameString[256];
+
+static BitmapLayer* jumperBitmapLayers[10];
+static GBitmap* jumperBitmaps[10];
+static Jumper* jumpers[10];
 
 static GameState *game;
 
@@ -62,22 +64,21 @@ void renderCrash(int8_t direction)
   {
     bitmap_layer_set_bitmap(s_crash_layer, s_crash_left);
   }
+  else
+  {
+    bitmap_layer_set_bitmap(s_crash_layer, s_crash_middle);
+  }
 }
 
 void renderScores()
 {
   snprintf(scoreString, 10,"%u", (unsigned int)game->score);
   text_layer_set_text(scoreLayer, scoreString);
-  snprintf(highScoreString, 10,"%u", (unsigned int)game->highScore);
 }
 
 void updateScore()
 {
   game->score += 10;
-  if (game->score >= game->highScore)
-  {
-    game->highScore=game->score;
-  }
   renderScores();
 }
 
@@ -85,11 +86,66 @@ void updateScore()
 void triggerEndGame()
 {
   game->gameInPlay=0;
-  persist_write_int(0, game->highScore);
   renderCrash(game->crash); 
   sendScore(game->score);
   text_layer_set_text(nameLayer, friendlyNameString);
   text_layer_set_text(restartTextLayer, "Press Up to Restart ->");
+}
+void updateJumpers()
+{
+  for (int i=0;i<10;++i)
+  {
+    if (jumpers[i]->live)
+      update(jumpers[i]);
+  }
+}
+
+void render(Jumper* object)
+{
+  switch(object->position)
+  {
+  case 0:
+   default:
+      APP_LOG(APP_LOG_LEVEL_INFO, "Object Render");
+      break;
+  }
+}
+
+void renderJumpers()
+{
+  for (int i=0;i<10;++i)
+  {
+    if (jumpers[i]->live)
+      render(jumpers[i]);
+  }
+}
+void handleCollisions()
+{
+  for (int i=0;i<10;++i)
+  {
+    switch(atCheckpoint(jumpers[i]))
+    {
+      case 0:
+      case 1:
+      case 2:
+      default:
+        APP_LOG(APP_LOG_LEVEL_INFO, "Object Collision");
+        break;
+    }
+  }
+}
+
+void spawnNewJumper(void)
+{
+  for (int i=0;i<10;++i)
+  {
+    if (!jumpers[i]->live)
+    {
+      initialise_Jumper(jumpers[i],0);
+      jumpers[i]->live=true;
+      break;
+    }
+  }
 }
 
 void updateWorld()
@@ -100,22 +156,34 @@ void updateWorld()
   //update time
   game->game_time += 1;
   
-  renderFire(game);
+  //check if sprites need to be updated
+  if (game->timeOfLastUpdate - game->game_time >= game->speed)
+  {
+    game->update = true;
+    game->timeOfLastUpdate = game->game_time;
+  }
   
+  if (game->update)
+  {
+    updateJumpers();
+    renderJumpers();
+    handleCollisions();
+  }
   
-  //update ball updates
-    
-  //handle collisions
+  renderFire(game);  
     
   //handle speed increases
   if ( (game->game_time - game->timeOfLastSpeedIncrease >= game->updateSpeedFrequency)  && game->speed >= 1 )
   {
+    spawnNewJumper();
     game->speed -= 1;
     game->timeOfLastSpeedIncrease = game->game_time;
   } 
   
   //handle game end
   
+  
+  //reinitialise loop
   app_timer_register(game->delay, updateWorld, NULL); 
   
 }
@@ -260,6 +328,14 @@ void handle_init(void)
   bitmap_layer_set_bitmap(s_background_layer, s_background);
   
   initFire();
+
+  for (int i=0;i<10;++i)
+  {
+    jumpers[i] = malloc(sizeof(Jumper));
+    initialise_Jumper(jumpers[i],0);
+    jumperBitmapLayers[i] = bitmap_layer_create(GRect(0, 0, 144, 168));
+  }
+  
   
   //set mgw based on keys
   bitmap_layer_set_bitmap(s_mgw_layer, s_mgw_middle);
@@ -292,11 +368,16 @@ void handle_deinit(void)
 {
   window_destroy(my_window);
   gbitmap_destroy(s_background);
-  gbitmap_destroy(s_mgw_middle);
   gbitmap_destroy(s_mgw_left);
+  gbitmap_destroy(s_mgw_middle);
   gbitmap_destroy(s_mgw_right);
   gbitmap_destroy(s_crash_left);
+  gbitmap_destroy(s_crash_middle);
   gbitmap_destroy(s_crash_right);
+  gbitmap_destroy(BMPfire0);
+  gbitmap_destroy(BMPfire1);
+  gbitmap_destroy(BMPfire2);
+  gbitmap_destroy(BMPfire3);
   bitmap_layer_destroy(s_background_layer);
   bitmap_layer_destroy(s_mgw_layer);
   bitmap_layer_destroy(s_crash_layer);
@@ -304,7 +385,13 @@ void handle_deinit(void)
   bitmap_layer_destroy(s_fire_layer1);
   text_layer_destroy(scoreLayer);
   text_layer_destroy(nameLayer);
-    
+  
+  for (int i=0;i<10;++i)
+  {  
+    free(jumpers[i]);
+    free(jumperBitmapLayers[i]);
+  }
+  
   free(mgw);
   free(game);
   

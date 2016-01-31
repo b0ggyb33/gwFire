@@ -12,6 +12,14 @@
     "resources": {
         "media": [
             {
+                "file": "images/Jumper_start0.png",
+                "name": "IMAGE_START0",
+                "targetPlatforms": [
+                    "basalt"
+                ],
+                "type": "bitmap"
+            },
+            {
                 "file": "images/Fire3.png",
                 "name": "IMAGE_FIRE3",
                 "targetPlatforms": [
