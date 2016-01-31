@@ -12,6 +12,62 @@
     "resources": {
         "media": [
             {
+                "file": "images/Fire3.png",
+                "name": "IMAGE_FIRE3",
+                "targetPlatforms": [
+                    "basalt"
+                ],
+                "type": "bitmap"
+            },
+            {
+                "file": "images/Fire2.png",
+                "name": "IMAGE_FIRE2",
+                "targetPlatforms": [
+                    "basalt"
+                ],
+                "type": "bitmap"
+            },
+            {
+                "file": "images/Fire1.png",
+                "name": "IMAGE_FIRE1",
+                "targetPlatforms": [
+                    "basalt"
+                ],
+                "type": "bitmap"
+            },
+            {
+                "file": "images/Fire0.png",
+                "name": "IMAGE_FIRE0",
+                "targetPlatforms": [
+                    "basalt"
+                ],
+                "type": "bitmap"
+            },
+            {
+                "file": "images/firemenRight.png",
+                "name": "IMAGE_MGW_RIGHT",
+                "targetPlatforms": [
+                    "basalt"
+                ],
+                "type": "bitmap"
+            },
+            {
+                "file": "images/firemenCentre.png",
+                "name": "IMAGE_MGW_MIDDLE",
+                "targetPlatforms": [
+                    "basalt"
+                ],
+                "type": "bitmap"
+            },
+            {
+                "file": "images/firemenLeft.png",
+                "name": "IMAGE_MGW_LEFT",
+                "targetPlatforms": [
+                    "basalt"
+                ],
+                "type": "bitmap"
+            },
+            {
                 "file": "images/background.png",
                 "name": "IMAGE_BG",
                 "targetPlatforms": [

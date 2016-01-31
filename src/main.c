@@ -15,14 +15,15 @@ static GBitmap *s_background;
 static GBitmap *s_mgw_left, *s_mgw_middle, *s_mgw_right;
 static GBitmap *s_crash_left, *s_crash_right;
 
+static GBitmap *BMPfire0, *BMPfire1, *BMPfire2, *BMPfire3;
+
 static BitmapLayer *s_background_layer;
 static BitmapLayer *s_mgw_layer;
-static Layer *s_ball_layer;
 static BitmapLayer *s_crash_layer;
+static BitmapLayer *s_fire_layer0, *s_fire_layer1;
 static MrGameAndWatch* mgw;
 
 static TextLayer *scoreLayer;
-static TextLayer *highScoreLayer;
 static TextLayer *nameLayer;
 static TextLayer *restartTextLayer;
 
@@ -32,13 +33,6 @@ static char friendlyNameString[256];
 
 static GameState *game;
 
-
-static uint8_t positions0x[8] = {51,56,60,68,77,85,88,93};
-static uint8_t positions0y[8] = {128,101,81,61,61,81,101,128};
-static uint8_t positions1x[10] = {41,42,48,55,68,78,86,94,98,102};
-static uint8_t positions1y[10] = {128,103,76,53,43,43,53,76,103,128};
-static uint8_t positions2x[12] = {32,32,36,42,53,66,77,88,98,105,110,113};
-static uint8_t positions2y[12] = {128,100,78,54,35,28,28,35,54,78,100,128};
 
 static void inbox_received_callback(DictionaryIterator *iterator, void *context) 
 {
@@ -75,7 +69,6 @@ void renderScores()
   snprintf(scoreString, 10,"%u", (unsigned int)game->score);
   text_layer_set_text(scoreLayer, scoreString);
   snprintf(highScoreString, 10,"%u", (unsigned int)game->highScore);
-  text_layer_set_text(highScoreLayer, highScoreString);
 }
 
 void updateScore()
@@ -107,7 +100,8 @@ void updateWorld()
   //update time
   game->game_time += 1;
   
-  //ignoring keypress as event driven
+  renderFire(game);
+  
   
   //update ball updates
     
@@ -123,6 +117,32 @@ void updateWorld()
   //handle game end
   
   app_timer_register(game->delay, updateWorld, NULL); 
+  
+}
+
+void renderFire(GameState* game)
+{
+  int localGameTime = game->game_time%60;
+  if (localGameTime < 15)
+  {
+    bitmap_layer_set_bitmap(s_fire_layer0, BMPfire0);
+    bitmap_layer_set_bitmap(s_fire_layer1, BMPfire1);
+  }
+  else if (localGameTime < 30)
+  {
+    bitmap_layer_set_bitmap(s_fire_layer0, BMPfire1);
+    bitmap_layer_set_bitmap(s_fire_layer1, BMPfire2);
+  }
+  else if (localGameTime < 45)
+  {
+    bitmap_layer_set_bitmap(s_fire_layer0, BMPfire2);
+    bitmap_layer_set_bitmap(s_fire_layer1, BMPfire3);
+  }
+  else
+  {
+    bitmap_layer_set_bitmap(s_fire_layer0, BMPfire3);
+    bitmap_layer_set_bitmap(s_fire_layer1, BMPfire0);
+  }
   
 }
 
@@ -185,6 +205,18 @@ static void click_config_provider(void *context)
   window_single_click_subscribe(BUTTON_ID_UP, reset_game_handler);
 }
 
+void initFire(void)
+{
+  BMPfire0 = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_FIRE0);
+  BMPfire1 = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_FIRE1);
+  BMPfire2 = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_FIRE2);
+  BMPfire3 = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_FIRE3);
+  s_fire_layer0 = bitmap_layer_create(GRect(0, 0, 144, 168));
+  s_fire_layer1 = bitmap_layer_create(GRect(0, 0, 144, 168));
+  bitmap_layer_set_compositing_mode(s_fire_layer0, GCompOpSet);
+  bitmap_layer_set_compositing_mode(s_fire_layer1, GCompOpSet);
+}
+
 void handle_init(void) 
 { 
   //app_message_register_outbox_failed(outbox_failed_callback);
@@ -198,11 +230,9 @@ void handle_init(void)
   
   // initialise score layers
   scoreLayer = text_layer_create(GRect(0,0,60,20));
-  highScoreLayer = text_layer_create(GRect(144-30,0,30,20));  
   nameLayer = text_layer_create(GRect(0,40,160,60));
   restartTextLayer = text_layer_create(GRect(0,20,160,20));
   text_layer_set_background_color(scoreLayer, GColorClear);
-  text_layer_set_background_color(highScoreLayer, GColorClear);
   text_layer_set_background_color(nameLayer, GColorClear);
   text_layer_set_background_color(restartTextLayer, GColorClear);
   
@@ -211,15 +241,16 @@ void handle_init(void)
   s_mgw_left = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_MGW_LEFT);
   s_mgw_middle = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_MGW_MIDDLE);
   s_mgw_right = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_MGW_RIGHT);
-  s_crash_left = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_CRASH_LEFT);
-  s_crash_right = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_CRASH_RIGHT);
   
-  // Create the BitmapLayer
+  //s_crash_left = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_CRASH_LEFT);
+  //s_crash_right = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_CRASH_RIGHT);
+  
+  // Create the BitmapLayers
   window_set_background_color(my_window,BACKGROUND_COLOUR);
   s_background_layer = bitmap_layer_create(GRect(0, 0, 144, 168));
-  //s_ball_layer = layer_create(GRect(0, 0, 144, 168)); 
-  //s_mgw_layer = bitmap_layer_create(GRect(0, 168-51, 144, 51));
+  s_mgw_layer = bitmap_layer_create(GRect(0, 0, 144, 168));
   s_crash_layer = bitmap_layer_create(GRect(0, 168-51, 144, 51));
+  
     
   // Set the correct compositing mode
   bitmap_layer_set_compositing_mode(s_background_layer, GCompOpSet);
@@ -227,6 +258,8 @@ void handle_init(void)
   bitmap_layer_set_compositing_mode(s_crash_layer, GCompOpSet);
   
   bitmap_layer_set_bitmap(s_background_layer, s_background);
+  
+  initFire();
   
   //set mgw based on keys
   bitmap_layer_set_bitmap(s_mgw_layer, s_mgw_middle);
@@ -237,9 +270,10 @@ void handle_init(void)
   layer_add_child(window_get_root_layer(my_window), bitmap_layer_get_layer(s_background_layer));
   layer_add_child(window_get_root_layer(my_window), bitmap_layer_get_layer(s_mgw_layer));
   layer_add_child(window_get_root_layer(my_window), bitmap_layer_get_layer(s_crash_layer));
-  layer_add_child(window_get_root_layer(my_window), s_ball_layer);
+  layer_add_child(window_get_root_layer(my_window), bitmap_layer_get_layer(s_fire_layer0));
+  layer_add_child(window_get_root_layer(my_window), bitmap_layer_get_layer(s_fire_layer1));
+  
   layer_add_child(window_get_root_layer(my_window), text_layer_get_layer(scoreLayer));
-  layer_add_child(window_get_root_layer(my_window), text_layer_get_layer(highScoreLayer));
   layer_add_child(window_get_root_layer(my_window), text_layer_get_layer(nameLayer));
   layer_add_child(window_get_root_layer(my_window), text_layer_get_layer(restartTextLayer));
   
@@ -265,10 +299,10 @@ void handle_deinit(void)
   gbitmap_destroy(s_crash_right);
   bitmap_layer_destroy(s_background_layer);
   bitmap_layer_destroy(s_mgw_layer);
-  layer_destroy(s_ball_layer);
   bitmap_layer_destroy(s_crash_layer);
+  bitmap_layer_destroy(s_fire_layer0);
+  bitmap_layer_destroy(s_fire_layer1);
   text_layer_destroy(scoreLayer);
-  text_layer_destroy(highScoreLayer);
   text_layer_destroy(nameLayer);
     
   free(mgw);
