@@ -1,5 +1,8 @@
 {
-    "appKeys": {},
+    "appKeys": {
+        "KEY_FRIENDLY": 0,
+        "KEY_SCORE": 1
+    },
     "capabilities": [
         ""
     ],
@@ -7,11 +10,23 @@
     "longName": "G&W Fire",
     "projectType": "native",
     "resources": {
-        "media": []
+        "media": [
+            {
+                "file": "images/background.png",
+                "name": "IMAGE_BG",
+                "targetPlatforms": [
+                    "basalt"
+                ],
+                "type": "bitmap"
+            }
+        ]
     },
     "sdkVersion": "3",
     "shortName": "G&W Fire",
-    "uuid": "11d29863-1be0-48a1-8642-81419f6e576d",
+    "targetPlatforms": [
+        "basalt"
+    ],
+    "uuid": "36e1a5a5-6070-49ed-9d5f-aa298a1466cb",
     "versionLabel": "1.0",
     "watchapp": {
         "watchface": false
