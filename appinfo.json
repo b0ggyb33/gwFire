@@ -1,0 +1,19 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "b0ggyb33@gmail.com",
+    "longName": "G&W Fire",
+    "projectType": "native",
+    "resources": {
+        "media": []
+    },
+    "sdkVersion": "3",
+    "shortName": "G&W Fire",
+    "uuid": "11d29863-1be0-48a1-8642-81419f6e576d",
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": false
+    }
+}
