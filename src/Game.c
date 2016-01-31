@@ -12,15 +12,7 @@ void initialiseGameState(GameState* state)
   state->timeOfLastSpeedIncrease=0;
   state->delay = 50;
   state->updateSpeedFrequency=150; //controls 'difficulty'
-  
-  if (persist_exists(0)) //persist 0 is key for high score
-  {
-    state->highScore = persist_read_int(0);
-  }
-  else
-  {
-    state->highScore=0;
-  }
+  state->update=false;
   
 }
 
