@@ -330,9 +330,9 @@ void handle_init(void)
   mgwBitmaps[1] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_MGW_MIDDLE);
   mgwBitmaps[2] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_MGW_RIGHT);
   
-  //crashBitmaps[0] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_CRASH_LEFT);
-  //crashBitmaps[1] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_CRASH_MIDDLE);
-  //crashBitmaps[2] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_CRASH_RIGHT);
+  crashBitmaps[0] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_CRASH_LEFT);
+  crashBitmaps[1] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_CRASH_MIDDLE);
+  crashBitmaps[2] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_CRASH_RIGHT);
   
   // Create the BitmapLayers
   window_set_background_color(my_window,BACKGROUND_COLOUR);
@@ -350,12 +350,32 @@ void handle_init(void)
   
   initFire();
 
-  //for (int i=0;i<NUMBER_OF_JUMPER_IMAGES;++i)
-  //{ 
-  //  jumperBitmaps[i] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_START0);
-  // }
+  jumperBitmaps[0] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP0);
+  jumperBitmaps[1] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP1);
+  jumperBitmaps[2] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP2);
+  jumperBitmaps[3] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP3);
+  jumperBitmaps[4] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP4);
+  jumperBitmaps[5] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP5);
+  jumperBitmaps[6] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP6);
+  jumperBitmaps[7] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP7);
+  jumperBitmaps[8] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP8);
+  jumperBitmaps[9] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP9);
+  jumperBitmaps[10] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP10);
+  jumperBitmaps[11] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP11);
+  jumperBitmaps[12] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP12);
+  jumperBitmaps[13] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP13);
+  jumperBitmaps[14] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP14);
+  jumperBitmaps[15] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP15);
+  jumperBitmaps[16] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP16);
+  jumperBitmaps[17] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP17);
+  jumperBitmaps[18] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP18);
+  jumperBitmaps[19] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP19);
+  jumperBitmaps[20] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP20);
+  jumperBitmaps[21] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP21);
+  
+
   startingImage0 = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_START0);
-  //startingImage1 = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_START0);
+  startingImage1 = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_START1);
   
   
   //set mgw based on keys
@@ -429,9 +449,10 @@ void handle_deinit(void)
   {  
     free(jumperBitmaps[i]);
   }
-  free(startingImage1);
-  free(startingImage0);
   
+  free(startingImage0);
+  free(startingImage1);
+
   free(mgw);
   free(game);
   
