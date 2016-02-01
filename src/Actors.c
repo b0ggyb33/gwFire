@@ -28,9 +28,9 @@ void initialise_Jumper(Jumper* object, int8_t initialPosition)
   object->position = initialPosition;
   object->lowerLimit = initialPosition;
   object->upperLimit = 21;
-  object->upperCheck = 20;
-  object->lowerCheck = 14;
-  object->middleCheck = 7;
+  object->upperCheck = 17;
+  object->lowerCheck = 3;
+  object->middleCheck = 11;
   object->hasBeenScored=false;
 }
 
