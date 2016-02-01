@@ -19,6 +19,14 @@
                 ],
                 "type": "bitmap"
             },
+			{
+                "file": "images/Jumper_start1.png",
+                "name": "IMAGE_START1",
+                "targetPlatforms": [
+                    "basalt"
+                ],
+                "type": "bitmap"
+            },
             {
                 "file": "images/Fire3.png",
                 "name": "IMAGE_FIRE3",
