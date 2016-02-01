@@ -275,14 +275,6 @@
 				],
 				"type": "bitmap"
 			},
-			{
-				"file": "images/Jumper_pos21.png",
-				"name": "IMAGE_JUMP21",
-				"targetPlatforms": [
-					"basalt"
-				],
-				"type": "bitmap"
-			},
             {
                 "file": "images/background.png",
                 "name": "IMAGE_BG",
