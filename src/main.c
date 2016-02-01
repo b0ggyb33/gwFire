@@ -337,7 +337,7 @@ void handle_init(void)
   // Create the BitmapLayers
   window_set_background_color(my_window,BACKGROUND_COLOUR);
   s_background_layer = bitmap_layer_create(GRect(0, 0, 144, 168));
-  s_mgw_layer = bitmap_layer_create(GRect(0, 0, 144, 168));
+  s_mgw_layer = bitmap_layer_create(GRect(0, 118, 144, 50));
   s_crash_layer = bitmap_layer_create(GRect(0, 138, 144, 30));
   
     
