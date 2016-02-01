@@ -300,7 +300,7 @@ void initFire(void)
   
   for (int i=0;i<2;++i)
   {
-    fireLayers[i] =  bitmap_layer_create(GRect(0, 0, 144, 168));
+    fireLayers[i] =  bitmap_layer_create(GRect(0, 0, 60, 30));
     bitmap_layer_set_compositing_mode(fireLayers[i], GCompOpSet);
   }
 }
