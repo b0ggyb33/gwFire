@@ -104,7 +104,7 @@ void render(Jumper* object, int i)
   if (object->position == object->lowerLimit)
   {//always true when initialised
     APP_LOG(APP_LOG_LEVEL_INFO, "Render Jumper in initialPosition");
-    if (object->lowerLimit==0)
+    if (object->lowerLimit==-1)
     {
       APP_LOG(APP_LOG_LEVEL_INFO, "initialPosition0");
       bitmap_layer_set_bitmap(jumperBitmapLayers[i], startingImage0);
@@ -154,7 +154,7 @@ void spawnNewJumper(void)
     if (!jumpers[i]->live)
     {
       APP_LOG(APP_LOG_LEVEL_INFO, "New Jumper!");
-      initialise_Jumper(jumpers[i],0);
+      initialise_Jumper(jumpers[i],-1); //means that first "position" will be 0
       jumpers[i]->live=true;
       render(jumpers[i], i);
       break;
@@ -349,31 +349,7 @@ void handle_init(void)
   bitmap_layer_set_bitmap(s_background_layer, s_background);
   
   initFire();
-
-  jumperBitmaps[0] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP0);
-  jumperBitmaps[1] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP1);
-  jumperBitmaps[2] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP2);
-  jumperBitmaps[3] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP3);
-  jumperBitmaps[4] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP4);
-  jumperBitmaps[5] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP5);
-  jumperBitmaps[6] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP6);
-  jumperBitmaps[7] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP7);
-  jumperBitmaps[8] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP8);
-  jumperBitmaps[9] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP9);
-  jumperBitmaps[10] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP10);
-  jumperBitmaps[11] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP11);
-  jumperBitmaps[12] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP12);
-  jumperBitmaps[13] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP13);
-  jumperBitmaps[14] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP14);
-  jumperBitmaps[15] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP15);
-  jumperBitmaps[16] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP16);
-  jumperBitmaps[17] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP17);
-  jumperBitmaps[18] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP18);
-  jumperBitmaps[19] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP19);
-  jumperBitmaps[20] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP20);
-  jumperBitmaps[21] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP21);
   
-
   startingImage0 = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_START0);
   startingImage1 = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_START1);
   
@@ -395,6 +371,28 @@ void handle_init(void)
   layer_add_child(window_get_root_layer(my_window), text_layer_get_layer(scoreLayer));
   layer_add_child(window_get_root_layer(my_window), text_layer_get_layer(nameLayer));
   layer_add_child(window_get_root_layer(my_window), text_layer_get_layer(restartTextLayer));
+  
+  jumperBitmaps[0] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP0);
+  jumperBitmaps[1] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP1);
+  jumperBitmaps[2] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP2);
+  jumperBitmaps[3] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP3);
+  jumperBitmaps[4] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP4);
+  jumperBitmaps[5] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP5);
+  jumperBitmaps[6] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP6);
+  jumperBitmaps[7] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP7);
+  jumperBitmaps[8] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP8);
+  jumperBitmaps[9] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP9);
+  jumperBitmaps[10] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP10);
+  jumperBitmaps[11] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP11);
+  jumperBitmaps[12] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP12);
+  jumperBitmaps[13] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP13);
+  jumperBitmaps[14] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP14);
+  jumperBitmaps[15] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP15);
+  jumperBitmaps[16] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP16);
+  jumperBitmaps[17] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP17);
+  jumperBitmaps[18] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP18);
+  jumperBitmaps[19] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP19);
+  jumperBitmaps[20] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_JUMP20);
   
   for (int i=0;i<NUMBER_OF_JUMPERS;++i)
   {
