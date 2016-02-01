@@ -108,19 +108,19 @@
                 "type": "bitmap"
             },
 			{
-			"file": "images/Jumper_pos0.png",
-			"name": "IMAGE_JUMP0",
-			"targetPlatforms": [
-				"basalt"
-			\],
-			"type": "bitmap"
+				"file": "images/Jumper_pos0.png",
+				"name": "IMAGE_JUMP0",
+				"targetPlatforms": [
+					"basalt"
+				],
+				"type": "bitmap"
 			},
 			{
 				"file": "images/Jumper_pos1.png",
 				"name": "IMAGE_JUMP1",
 				"targetPlatforms": [
 					"basalt"
-				\],
+				],
 				"type": "bitmap"
 			},
 			{
@@ -128,7 +128,7 @@
 				"name": "IMAGE_JUMP2",
 				"targetPlatforms": [
 					"basalt"
-				\],
+				],
 				"type": "bitmap"
 			},
 			{
@@ -136,7 +136,7 @@
 				"name": "IMAGE_JUMP3",
 				"targetPlatforms": [
 					"basalt"
-				\],
+				],
 				"type": "bitmap"
 			},
 			{
@@ -144,7 +144,7 @@
 				"name": "IMAGE_JUMP4",
 				"targetPlatforms": [
 					"basalt"
-				\],
+				],
 				"type": "bitmap"
 			},
 			{
@@ -152,7 +152,7 @@
 				"name": "IMAGE_JUMP5",
 				"targetPlatforms": [
 					"basalt"
-				\],
+				],
 				"type": "bitmap"
 			},
 			{
@@ -160,7 +160,7 @@
 				"name": "IMAGE_JUMP6",
 				"targetPlatforms": [
 					"basalt"
-				\],
+				],
 				"type": "bitmap"
 			},
 			{
@@ -168,7 +168,7 @@
 				"name": "IMAGE_JUMP7",
 				"targetPlatforms": [
 					"basalt"
-				\],
+				],
 				"type": "bitmap"
 			},
 			{
@@ -176,7 +176,7 @@
 				"name": "IMAGE_JUMP8",
 				"targetPlatforms": [
 					"basalt"
-				\],
+				],
 				"type": "bitmap"
 			},
 			{
@@ -184,7 +184,7 @@
 				"name": "IMAGE_JUMP9",
 				"targetPlatforms": [
 					"basalt"
-				\],
+				],
 				"type": "bitmap"
 			},
 			{
@@ -192,7 +192,7 @@
 				"name": "IMAGE_JUMP10",
 				"targetPlatforms": [
 					"basalt"
-				\],
+				],
 				"type": "bitmap"
 			},
 			{
@@ -200,7 +200,7 @@
 				"name": "IMAGE_JUMP11",
 				"targetPlatforms": [
 					"basalt"
-				\],
+				],
 				"type": "bitmap"
 			},
 			{
@@ -208,7 +208,7 @@
 				"name": "IMAGE_JUMP12",
 				"targetPlatforms": [
 					"basalt"
-				\],
+				],
 				"type": "bitmap"
 			},
 			{
@@ -216,7 +216,7 @@
 				"name": "IMAGE_JUMP13",
 				"targetPlatforms": [
 					"basalt"
-				\],
+				],
 				"type": "bitmap"
 			},
 			{
@@ -224,7 +224,7 @@
 				"name": "IMAGE_JUMP14",
 				"targetPlatforms": [
 					"basalt"
-				\],
+				],
 				"type": "bitmap"
 			},
 			{
@@ -232,7 +232,7 @@
 				"name": "IMAGE_JUMP15",
 				"targetPlatforms": [
 					"basalt"
-				\],
+				],
 				"type": "bitmap"
 			},
 			{
@@ -240,7 +240,7 @@
 				"name": "IMAGE_JUMP16",
 				"targetPlatforms": [
 					"basalt"
-				\],
+				],
 				"type": "bitmap"
 			},
 			{
@@ -248,7 +248,7 @@
 				"name": "IMAGE_JUMP17",
 				"targetPlatforms": [
 					"basalt"
-				\],
+				],
 				"type": "bitmap"
 			},
 			{
@@ -256,7 +256,7 @@
 				"name": "IMAGE_JUMP18",
 				"targetPlatforms": [
 					"basalt"
-				\],
+				],
 				"type": "bitmap"
 			},
 			{
@@ -264,7 +264,7 @@
 				"name": "IMAGE_JUMP19",
 				"targetPlatforms": [
 					"basalt"
-				\],
+				],
 				"type": "bitmap"
 			},
 			{
@@ -272,7 +272,7 @@
 				"name": "IMAGE_JUMP20",
 				"targetPlatforms": [
 					"basalt"
-				\],
+				],
 				"type": "bitmap"
 			},
 			{
@@ -280,7 +280,7 @@
 				"name": "IMAGE_JUMP21",
 				"targetPlatforms": [
 					"basalt"
-				\],
+				],
 				"type": "bitmap"
 			},
             {

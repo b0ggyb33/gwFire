@@ -8,7 +8,7 @@ def generate(n):
     example+= "\",\n"
     example+="\t\"targetPlatforms\": [\n"
     example+="\t\t\"basalt\"\n"
-    example+="\t\],\n"
+    example+="\t],\n"
     example+="\t\"type\": \"bitmap\"\n"
     example+="},"
     return example
