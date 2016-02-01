@@ -112,16 +112,18 @@ void render(Jumper* object, int i)
     }
     else
     {
+      APP_LOG(APP_LOG_LEVEL_INFO, "initialPosition1");
       bitmap_layer_set_bitmap(jumperBitmapLayers[i], startingImage1);
     }
   }
   else
   {
     APP_LOG(APP_LOG_LEVEL_INFO, "Render Jumper in position: %d",object->position);
-    GRect newFrame = GRect(offsets[i][1],
-						 offsets[object->position][0], 
-             offsets[object->position][3]-offsets[object->position][1],
-						 offsets[object->position][2]-offsets[object->position][0]);
+    GRect newFrame = GRect(offsets[object->position][1],
+						               offsets[object->position][0], 
+                           offsets[object->position][3]-offsets[object->position][1],
+						               offsets[object->position][2]-offsets[object->position][0]);
+    
     layer_set_frame(bitmap_layer_get_layer(jumperBitmapLayers[i]), newFrame);
 
     bitmap_layer_set_bitmap(jumperBitmapLayers[i], jumperBitmaps[object->position]);  
@@ -136,6 +138,14 @@ void renderJumpers()
     {
       APP_LOG(APP_LOG_LEVEL_INFO, "Rendering Live Jumper!");
       render(jumpers[i], i);
+      if (layer_get_hidden(bitmap_layer_get_layer(jumperBitmapLayers[i])))
+      {
+        layer_set_hidden(bitmap_layer_get_layer(jumperBitmapLayers[i]),false);
+      }
+    }
+    else
+    {//jumper is not live, so hide the layer
+      layer_set_hidden(bitmap_layer_get_layer(jumperBitmapLayers[i]),true);
     }
   }
 }
@@ -161,7 +171,14 @@ void spawnNewJumper(void)
     if (!jumpers[i]->live)
     {
       APP_LOG(APP_LOG_LEVEL_INFO, "New Jumper!");
-      initialise_Jumper(jumpers[i],-1); //means that first "position" will be 0
+      if (i%4!=0)
+      {
+        initialise_Jumper(jumpers[i],-1); //means that first "position" will be 0
+      }
+      else
+      {
+        initialise_Jumper(jumpers[i],1); //means that first "position" will be 2
+      }
       jumpers[i]->live=true;
       render(jumpers[i], i);
       break;
@@ -207,12 +224,16 @@ void updateWorld()
 
   
   renderFire(game);  
-    
+  
+  
   //handle speed increases
-  if ( (game->game_time - game->timeOfLastSpeedIncrease >= game->updateSpeedFrequency)  && game->speed >= 1 )
+  if ( game->game_time - game->timeOfLastSpeedIncrease >= game->updateSpeedFrequency  )
   {
     spawnNewJumper();
-    game->speed -= 1;
+    if(game->updateSpeedFrequency >= 50)
+    {
+      game->speed -= 1;
+    }  
     game->timeOfLastSpeedIncrease = game->game_time;
   } 
   
@@ -267,6 +288,13 @@ static void reset_game_handler(ClickRecognizerRef recognizer, void *context)
     render_MisterGameAndWatch(mgw);
     
     renderScores();
+    
+    for (int i=0;i<NUMBER_OF_JUMPERS;++i)
+    {
+      initialise_Jumper(jumpers[i],0);
+      
+    }
+    renderJumpers();
     
     app_timer_register(game->delay, updateWorld, NULL); 
   }
@@ -324,7 +352,7 @@ void handle_init(void)
   initialiseGameState(game);
   
   // initialise score layers
-  scoreLayer = text_layer_create(GRect(0,0,60,20));
+  scoreLayer = text_layer_create(GRect(144-60,0,60,20));
   nameLayer = text_layer_create(GRect(0,40,160,60));
   restartTextLayer = text_layer_create(GRect(0,20,160,20));
   text_layer_set_background_color(scoreLayer, GColorClear);
@@ -416,7 +444,9 @@ void handle_init(void)
   //initialise game objects
   mgw = malloc(sizeof(MrGameAndWatch));
   initialise_MisterGameAndWatch(mgw);
-    
+  
+  spawnNewJumper();
+  
   light_enable(true);
   
 }

@@ -11,7 +11,7 @@ void initialiseGameState(GameState* state)
   state->timeOfLastUpdate=0;
   state->timeOfLastSpeedIncrease=0;
   state->delay = 50;
-  state->updateSpeedFrequency=150; //controls 'difficulty'
+  state->updateSpeedFrequency=250; //controls 'difficulty'
   state->update=false;
   
 }
