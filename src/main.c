@@ -118,10 +118,11 @@ void render(Jumper* object, int i)
   else
   {
     APP_LOG(APP_LOG_LEVEL_INFO, "Render Jumper in position: %d",object->position);
-    layer_set_frame(jumperBitmapLayers[i], GRect(offsets[i][0],
-						 offsets[i][1],
-						 offsets[i][2]-offsets[i][0]),
-						 offsets[i][3]-offsets[i][1]))
+    GRect newFrame = GRect(offsets[i][1],
+						 offsets[object->position][0], 
+             offsets[object->position][3]-offsets[object->position][1],
+						 offsets[object->position][2]-offsets[object->position][0]);
+    layer_set_frame(bitmap_layer_get_layer(jumperBitmapLayers[i]), newFrame);
 
     bitmap_layer_set_bitmap(jumperBitmapLayers[i], jumperBitmaps[object->position]);  
   }
