@@ -25,6 +25,7 @@ typedef struct
   bool live;
   int8_t position;
   int8_t upperLimit;
+  int8_t lowerLimit;
   int8_t upperCheck;
   int8_t middleCheck;
   int8_t lowerCheck;  

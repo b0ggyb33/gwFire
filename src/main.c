@@ -9,11 +9,14 @@
   #define BACKGROUND_COLOUR GColorWhite  
 #endif
 
+#define NUMBER_OF_JUMPER_IMAGES 21
+#define NUMBER_OF_JUMPERS 10
+
 Window *my_window;
 static GBitmap *s_background;
 static GBitmap *s_mgw_left, *s_mgw_middle, *s_mgw_right;
 static GBitmap *s_crash_left, *s_crash_middle, *s_crash_right;
-
+static GBitmap *startingImage0,*startingImage1;
 static GBitmap *BMPfire0, *BMPfire1, *BMPfire2, *BMPfire3;
 
 static BitmapLayer *s_background_layer;
@@ -29,9 +32,9 @@ static TextLayer *restartTextLayer;
 static char scoreString[10];
 static char friendlyNameString[256];
 
-static BitmapLayer* jumperBitmapLayers[10];
-static GBitmap* jumperBitmaps[21];
-static Jumper* jumpers[10];
+static BitmapLayer* jumperBitmapLayers[NUMBER_OF_JUMPERS];
+static GBitmap* jumperBitmaps[NUMBER_OF_JUMPER_IMAGES];
+static Jumper* jumpers[NUMBER_OF_JUMPERS];
 
 static GameState *game;
 
@@ -94,7 +97,7 @@ void triggerEndGame()
 
 void updateJumpers()
 {
-  for (int i=0;i<10;++i)
+  for (int i=0;i<NUMBER_OF_JUMPERS;++i)
   {
     if (jumpers[i]->live)
     {
@@ -108,14 +111,27 @@ void updateJumpers()
 }
 
 void render(Jumper* object, int i)
-{
-  //need to pass in i to update the correct layer
-  bitmap_layer_set_bitmap(jumperBitmapLayers[i], jumperBitmaps[object->position]);
+{//need to pass in i to update the correct layer
+  if (object->position == object->lowerLimit)
+  {//always true when initialised
+    if (object->lowerLimit==0)
+    {
+      bitmap_layer_set_bitmap(jumperBitmapLayers[i], startingImage0);
+    }
+    else
+    {
+      bitmap_layer_set_bitmap(jumperBitmapLayers[i], startingImage1);
+    }
+  }
+  else
+  {
+    bitmap_layer_set_bitmap(jumperBitmapLayers[i], jumperBitmaps[object->position]);  
+  }
 }
 
 void renderJumpers()
 {
-  for (int i=0;i<10;++i)
+  for (int i=0;i<NUMBER_OF_JUMPERS;++i)
   {
     if (jumpers[i]->live)
       render(jumpers[i], i);
@@ -123,7 +139,7 @@ void renderJumpers()
 }
 void handleCollisionsWithFiremen()
 {
-  for (int i=0;i<10;++i)
+  for (int i=0;i<NUMBER_OF_JUMPERS;++i)
   {
     if (!jumpers[i]->hasBeenScored)
     {
@@ -138,10 +154,11 @@ void handleCollisionsWithFiremen()
 
 void spawnNewJumper(void)
 {
-  for (int i=0;i<10;++i)
+  for (int i=0;i<NUMBER_OF_JUMPERS;++i)
   {
     if (!jumpers[i]->live)
     {
+      APP_LOG(APP_LOG_LEVEL_INFO, "New Jumper!");
       initialise_Jumper(jumpers[i],0);
       jumpers[i]->live=true;
       break;
@@ -155,11 +172,12 @@ void updateWorld()
     return;
   
   //update time
-  game->game_time += 1;
-  
+  ++game->game_time;
+      
   //check if sprites need to be updated
-  if (game->timeOfLastUpdate - game->game_time >= game->speed)
+  if (game->game_time - game->timeOfLastUpdate >= game->speed)
   {
+    APP_LOG(APP_LOG_LEVEL_INFO, "Game Update");
     game->update = true;
     game->timeOfLastUpdate = game->game_time;
   }
@@ -169,9 +187,21 @@ void updateWorld()
   
   if (game->update)
   {
+    int liveJumpers=0;
+    for (int i=0;i<NUMBER_OF_JUMPERS;++i)
+    {
+      if (jumpers[i]->live)
+      {
+        ++liveJumpers;
+      }
+    }
+    APP_LOG(APP_LOG_LEVEL_INFO, "Number of Jumpers: %d", liveJumpers);
     updateJumpers();
     renderJumpers();
+    
+    game->update = false;
   }
+
   
   renderFire(game);  
     
@@ -332,12 +362,12 @@ void handle_init(void)
   
   initFire();
 
-  for (int i=0;i<10;++i)
-  {
-    jumpers[i] = malloc(sizeof(Jumper));
-    initialise_Jumper(jumpers[i],0);
-    jumperBitmapLayers[i] = bitmap_layer_create(GRect(0, 0, 144, 168));
-  }
+  //for (int i=0;i<NUMBER_OF_JUMPER_IMAGES;++i)
+  //{ 
+  //  jumperBitmaps[i] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_START0);
+  // }
+  startingImage0 = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_START0);
+  //startingImage1 = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_START0);
   
   
   //set mgw based on keys
@@ -355,6 +385,15 @@ void handle_init(void)
   layer_add_child(window_get_root_layer(my_window), text_layer_get_layer(scoreLayer));
   layer_add_child(window_get_root_layer(my_window), text_layer_get_layer(nameLayer));
   layer_add_child(window_get_root_layer(my_window), text_layer_get_layer(restartTextLayer));
+  
+  for (int i=0;i<NUMBER_OF_JUMPERS;++i)
+  {
+    jumpers[i] = malloc(sizeof(Jumper));
+    initialise_Jumper(jumpers[i],0);
+    jumperBitmapLayers[i] = bitmap_layer_create(GRect(0, 0, 144, 168));
+    bitmap_layer_set_compositing_mode(jumperBitmapLayers[i], GCompOpSet);
+    layer_add_child(window_get_root_layer(my_window), bitmap_layer_get_layer(jumperBitmapLayers[i]));
+  }
   
   window_stack_push(my_window, true);
   
@@ -389,11 +428,17 @@ void handle_deinit(void)
   text_layer_destroy(scoreLayer);
   text_layer_destroy(nameLayer);
   
-  for (int i=0;i<10;++i)
+  for (int i=0;i<NUMBER_OF_JUMPERS;++i)
   {  
     free(jumpers[i]);
     free(jumperBitmapLayers[i]);
   }
+  for (int i=0;i<NUMBER_OF_JUMPER_IMAGES;++i)
+  {  
+    free(jumperBitmaps[i]);
+  }
+  free(startingImage1);
+  free(startingImage0);
   
   free(mgw);
   free(game);

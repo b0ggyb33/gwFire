@@ -7,7 +7,7 @@ typedef struct
   bool gameInPlay;
   int game_time;
   uint16_t score;
-  int8_t speed;
+  int speed;
   int8_t crash;
   int timeOfLastUpdate;
   int timeOfLastSpeedIncrease;

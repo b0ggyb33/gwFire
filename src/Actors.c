@@ -26,6 +26,7 @@ void initialise_Jumper(Jumper* object, int8_t initialPosition)
 {
   object->live = false;
   object->position = initialPosition;
+  object->lowerLimit = initialPosition;
   object->upperLimit = 21;
   object->upperCheck = 20;
   object->lowerCheck = 14;
