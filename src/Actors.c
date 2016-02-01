@@ -26,6 +26,7 @@ void initialise_Jumper(Jumper* object, int8_t initialPosition)
 {
   object->live = false;
   object->position = initialPosition;
+  object->upperLimit = 21;
   object->upperCheck = 20;
   object->lowerCheck = 14;
   object->middleCheck = 7;
@@ -51,7 +52,23 @@ int8_t atCheckpoint(Jumper* object)
     return -1;
   }
 }
-void update(Jumper* object)
+bool update(Jumper* object)
 {
+  //check to see if the jumper was at a checkpoint and was missed
+  //if they were missed, crash the jumper and return
+  if (atCheckpoint(object)>=0 && !object->hasBeenScored)
+  {
+    object->live=false;
+    return false;
+  }
+  else
+  {
     ++object->position;
+    object->hasBeenScored = false; //reset scored status in preparation for next checkpoint
+    if (object->position > object->upperLimit)
+    {
+      object->live=false;
+    }
+    return true;
+  }  
 }

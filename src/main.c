@@ -30,7 +30,7 @@ static char scoreString[10];
 static char friendlyNameString[256];
 
 static BitmapLayer* jumperBitmapLayers[10];
-static GBitmap* jumperBitmaps[10];
+static GBitmap* jumperBitmaps[21];
 static Jumper* jumpers[10];
 
 static GameState *game;
@@ -54,13 +54,13 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
   
 }
 
-void renderCrash(int8_t direction)
+void renderCrash(int8_t position)
 {
-  if (direction == DIRECTION_RIGHT)
+  if (position == 2)
   {
     bitmap_layer_set_bitmap(s_crash_layer, s_crash_right);
   }
-  if (direction == DIRECTION_LEFT)
+  if (position == 0)
   {
     bitmap_layer_set_bitmap(s_crash_layer, s_crash_left);
   }
@@ -91,24 +91,26 @@ void triggerEndGame()
   text_layer_set_text(nameLayer, friendlyNameString);
   text_layer_set_text(restartTextLayer, "Press Up to Restart ->");
 }
+
 void updateJumpers()
 {
   for (int i=0;i<10;++i)
   {
     if (jumpers[i]->live)
-      update(jumpers[i]);
+    {
+      if (!update(jumpers[i]))
+      {//returned false, so jumper has fallen
+        game->crash = atCheckpoint(jumpers[i]); //get their position in checkpoint co-ordinates
+        triggerEndGame();
+      }
+    }
   }
 }
 
-void render(Jumper* object)
+void render(Jumper* object, int i)
 {
-  switch(object->position)
-  {
-  case 0:
-   default:
-      APP_LOG(APP_LOG_LEVEL_INFO, "Object Render");
-      break;
-  }
+  //need to pass in i to update the correct layer
+  bitmap_layer_set_bitmap(jumperBitmapLayers[i], jumperBitmaps[object->position]);
 }
 
 void renderJumpers()
@@ -116,21 +118,20 @@ void renderJumpers()
   for (int i=0;i<10;++i)
   {
     if (jumpers[i]->live)
-      render(jumpers[i]);
+      render(jumpers[i], i);
   }
 }
-void handleCollisions()
+void handleCollisionsWithFiremen()
 {
   for (int i=0;i<10;++i)
   {
-    switch(atCheckpoint(jumpers[i]))
+    if (!jumpers[i]->hasBeenScored)
     {
-      case 0:
-      case 1:
-      case 2:
-      default:
-        APP_LOG(APP_LOG_LEVEL_INFO, "Object Collision");
-        break;
+      if (mgw->position == atCheckpoint(jumpers[i]))
+      {
+        jumpers[i]->hasBeenScored=true;
+        updateScore();
+      }
     }
   }
 }
@@ -163,11 +164,13 @@ void updateWorld()
     game->timeOfLastUpdate = game->game_time;
   }
   
+  //this needs to happen outside the jumper update 
+  handleCollisionsWithFiremen(); 
+  
   if (game->update)
   {
     updateJumpers();
     renderJumpers();
-    handleCollisions();
   }
   
   renderFire(game);  
