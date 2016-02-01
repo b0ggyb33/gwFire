@@ -32,5 +32,7 @@ im = 255 - im
 print sys.argv[2]
 print "offset: "+str(minx)+", "+str(miny)
 print "size: "+str(maxx+1-minx)+", "+str(maxy+1-miny)
+print "{"+str(minx)+","+str(miny)+","+str(maxx)+","+str(maxy)+"},"
+
 outIm=Image.fromarray(im[minx:maxx+1,miny:maxy+1], 'L')
 outIm.save(sys.argv[2])

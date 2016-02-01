@@ -3,6 +3,7 @@
 #include "main.h"
 #include "JavascriptInterface.h"
 #include "Game.h"
+#include "jumperOffsets.h"
 #ifdef PBL_COLOR
   #define BACKGROUND_COLOUR GColorLimerick
 #else
@@ -117,6 +118,11 @@ void render(Jumper* object, int i)
   else
   {
     APP_LOG(APP_LOG_LEVEL_INFO, "Render Jumper in position: %d",object->position);
+    layer_set_frame(jumperBitmapLayers[i], GRect(offsets[i][0],
+						 offsets[i][1],
+						 offsets[i][2]-offsets[i][0]),
+						 offsets[i][3]-offsets[i][1]))
+
     bitmap_layer_set_bitmap(jumperBitmapLayers[i], jumperBitmaps[object->position]);  
   }
 }

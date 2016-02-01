@@ -84,7 +84,7 @@
                 "type": "bitmap"
             },
             {
-                "file": "images/Jumper_pos9.png",
+                "file": "images/cropped/Jumper_pos9.png",
                 "name": "IMAGE_JUMP9",
                 "targetPlatforms": [
                     "basalt"
@@ -92,7 +92,7 @@
                 "type": "bitmap"
             },
             {
-                "file": "images/Jumper_pos8.png",
+                "file": "images/cropped/Jumper_pos8.png",
                 "name": "IMAGE_JUMP8",
                 "targetPlatforms": [
                     "basalt"
@@ -100,7 +100,7 @@
                 "type": "bitmap"
             },
             {
-                "file": "images/Jumper_pos7.png",
+                "file": "images/cropped/Jumper_pos7.png",
                 "name": "IMAGE_JUMP7",
                 "targetPlatforms": [
                     "basalt"
@@ -108,7 +108,7 @@
                 "type": "bitmap"
             },
             {
-                "file": "images/Jumper_pos6.png",
+                "file": "images/cropped/Jumper_pos6.png",
                 "name": "IMAGE_JUMP6",
                 "targetPlatforms": [
                     "basalt"
@@ -116,7 +116,7 @@
                 "type": "bitmap"
             },
             {
-                "file": "images/Jumper_pos5.png",
+                "file": "images/cropped/Jumper_pos5.png",
                 "name": "IMAGE_JUMP5",
                 "targetPlatforms": [
                     "basalt"
@@ -124,7 +124,7 @@
                 "type": "bitmap"
             },
             {
-                "file": "images/Jumper_pos4.png",
+                "file": "images/cropped/Jumper_pos4.png",
                 "name": "IMAGE_JUMP4",
                 "targetPlatforms": [
                     "basalt"
@@ -132,7 +132,7 @@
                 "type": "bitmap"
             },
             {
-                "file": "images/Jumper_pos3.png",
+                "file": "images/cropped/Jumper_pos3.png",
                 "name": "IMAGE_JUMP3",
                 "targetPlatforms": [
                     "basalt"
@@ -140,7 +140,7 @@
                 "type": "bitmap"
             },
             {
-                "file": "images/Jumper_pos20.png",
+                "file": "images/cropped/Jumper_pos20.png",
                 "name": "IMAGE_JUMP20",
                 "targetPlatforms": [
                     "basalt"
@@ -148,7 +148,7 @@
                 "type": "bitmap"
             },
             {
-                "file": "images/Jumper_pos2.png",
+                "file": "images/cropped/Jumper_pos2.png",
                 "name": "IMAGE_JUMP2",
                 "targetPlatforms": [
                     "basalt"
@@ -156,7 +156,7 @@
                 "type": "bitmap"
             },
             {
-                "file": "images/Jumper_pos19.png",
+                "file": "images/cropped/Jumper_pos19.png",
                 "name": "IMAGE_JUMP19",
                 "targetPlatforms": [
                     "basalt"
@@ -164,7 +164,7 @@
                 "type": "bitmap"
             },
             {
-                "file": "images/Jumper_pos18.png",
+                "file": "images/cropped/Jumper_pos18.png",
                 "name": "IMAGE_JUMP18",
                 "targetPlatforms": [
                     "basalt"
@@ -172,7 +172,7 @@
                 "type": "bitmap"
             },
             {
-                "file": "images/Jumper_pos17.png",
+                "file": "images/cropped/Jumper_pos17.png",
                 "name": "IMAGE_JUMP17",
                 "targetPlatforms": [
                     "basalt"
@@ -180,7 +180,7 @@
                 "type": "bitmap"
             },
             {
-                "file": "images/Jumper_pos16.png",
+                "file": "images/cropped/Jumper_pos16.png",
                 "name": "IMAGE_JUMP16",
                 "targetPlatforms": [
                     "basalt"
@@ -188,7 +188,7 @@
                 "type": "bitmap"
             },
             {
-                "file": "images/Jumper_pos15.png",
+                "file": "images/cropped/Jumper_pos15.png",
                 "name": "IMAGE_JUMP15",
                 "targetPlatforms": [
                     "basalt"
@@ -196,7 +196,7 @@
                 "type": "bitmap"
             },
             {
-                "file": "images/Jumper_pos14.png",
+                "file": "images/cropped/Jumper_pos14.png",
                 "name": "IMAGE_JUMP14",
                 "targetPlatforms": [
                     "basalt"
@@ -204,7 +204,7 @@
                 "type": "bitmap"
             },
             {
-                "file": "images/Jumper_pos13.png",
+                "file": "images/cropped/Jumper_pos13.png",
                 "name": "IMAGE_JUMP13",
                 "targetPlatforms": [
                     "basalt"
@@ -212,7 +212,7 @@
                 "type": "bitmap"
             },
             {
-                "file": "images/Jumper_pos12.png",
+                "file": "images/cropped/Jumper_pos12.png",
                 "name": "IMAGE_JUMP12",
                 "targetPlatforms": [
                     "basalt"
@@ -220,7 +220,7 @@
                 "type": "bitmap"
             },
             {
-                "file": "images/Jumper_pos11.png",
+                "file": "images/cropped/Jumper_pos11.png",
                 "name": "IMAGE_JUMP11",
                 "targetPlatforms": [
                     "basalt"
@@ -228,7 +228,7 @@
                 "type": "bitmap"
             },
             {
-                "file": "images/Jumper_pos10.png",
+                "file": "images/cropped/Jumper_pos10.png",
                 "name": "IMAGE_JUMP10",
                 "targetPlatforms": [
                     "basalt"
@@ -236,7 +236,7 @@
                 "type": "bitmap"
             },
             {
-                "file": "images/Jumper_pos1.png",
+                "file": "images/cropped/Jumper_pos1.png",
                 "name": "IMAGE_JUMP1",
                 "targetPlatforms": [
                     "basalt"
@@ -244,7 +244,7 @@
                 "type": "bitmap"
             },
             {
-                "file": "images/Jumper_pos0.png",
+                "file": "images/cropped/Jumper_pos0.png",
                 "name": "IMAGE_JUMP0",
                 "targetPlatforms": [
                     "basalt"
