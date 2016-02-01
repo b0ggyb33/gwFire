@@ -14,15 +14,15 @@
 
 Window *my_window;
 static GBitmap *s_background;
-static GBitmap *s_mgw_left, *s_mgw_middle, *s_mgw_right;
-static GBitmap *s_crash_left, *s_crash_middle, *s_crash_right;
+static GBitmap *mgwBitmaps[3];
+static GBitmap *crashBitmaps[3];
 static GBitmap *startingImage0,*startingImage1;
-static GBitmap *BMPfire0, *BMPfire1, *BMPfire2, *BMPfire3;
+static GBitmap *fireBitmaps[4];
 
 static BitmapLayer *s_background_layer;
 static BitmapLayer *s_mgw_layer;
 static BitmapLayer *s_crash_layer;
-static BitmapLayer *s_fire_layer0, *s_fire_layer1;
+static BitmapLayer *fireLayers[2];
 static MrGameAndWatch* mgw;
 
 static TextLayer *scoreLayer;
@@ -59,18 +59,7 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
 
 void renderCrash(int8_t position)
 {
-  if (position == 2)
-  {
-    bitmap_layer_set_bitmap(s_crash_layer, s_crash_right);
-  }
-  if (position == 0)
-  {
-    bitmap_layer_set_bitmap(s_crash_layer, s_crash_left);
-  }
-  else
-  {
-    bitmap_layer_set_bitmap(s_crash_layer, s_crash_middle);
-  }
+    bitmap_layer_set_bitmap(s_crash_layer, crashBitmaps[position]);
 }
 
 void renderScores()
@@ -114,8 +103,10 @@ void render(Jumper* object, int i)
 {//need to pass in i to update the correct layer
   if (object->position == object->lowerLimit)
   {//always true when initialised
+    APP_LOG(APP_LOG_LEVEL_INFO, "Render Jumper in initialPosition");
     if (object->lowerLimit==0)
     {
+      APP_LOG(APP_LOG_LEVEL_INFO, "initialPosition0");
       bitmap_layer_set_bitmap(jumperBitmapLayers[i], startingImage0);
     }
     else
@@ -125,6 +116,7 @@ void render(Jumper* object, int i)
   }
   else
   {
+    APP_LOG(APP_LOG_LEVEL_INFO, "Render Jumper in position: %d",object->position);
     bitmap_layer_set_bitmap(jumperBitmapLayers[i], jumperBitmaps[object->position]);  
   }
 }
@@ -134,7 +126,10 @@ void renderJumpers()
   for (int i=0;i<NUMBER_OF_JUMPERS;++i)
   {
     if (jumpers[i]->live)
+    {
+      APP_LOG(APP_LOG_LEVEL_INFO, "Rendering Live Jumper!");
       render(jumpers[i], i);
+    }
   }
 }
 void handleCollisionsWithFiremen()
@@ -161,6 +156,7 @@ void spawnNewJumper(void)
       APP_LOG(APP_LOG_LEVEL_INFO, "New Jumper!");
       initialise_Jumper(jumpers[i],0);
       jumpers[i]->live=true;
+      render(jumpers[i], i);
       break;
     }
   }
@@ -226,41 +222,30 @@ void renderFire(GameState* game)
   int localGameTime = game->game_time%60;
   if (localGameTime < 15)
   {
-    bitmap_layer_set_bitmap(s_fire_layer0, BMPfire0);
-    bitmap_layer_set_bitmap(s_fire_layer1, BMPfire1);
+    bitmap_layer_set_bitmap(fireLayers[0], fireBitmaps[0]);
+    bitmap_layer_set_bitmap(fireLayers[1], fireBitmaps[1]);
   }
   else if (localGameTime < 30)
   {
-    bitmap_layer_set_bitmap(s_fire_layer0, BMPfire1);
-    bitmap_layer_set_bitmap(s_fire_layer1, BMPfire2);
+    bitmap_layer_set_bitmap(fireLayers[0], fireBitmaps[1]);
+    bitmap_layer_set_bitmap(fireLayers[1], fireBitmaps[2]);
   }
   else if (localGameTime < 45)
   {
-    bitmap_layer_set_bitmap(s_fire_layer0, BMPfire2);
-    bitmap_layer_set_bitmap(s_fire_layer1, BMPfire3);
+    bitmap_layer_set_bitmap(fireLayers[0], fireBitmaps[2]);
+    bitmap_layer_set_bitmap(fireLayers[1], fireBitmaps[3]);
   }
   else
   {
-    bitmap_layer_set_bitmap(s_fire_layer0, BMPfire3);
-    bitmap_layer_set_bitmap(s_fire_layer1, BMPfire0);
+    bitmap_layer_set_bitmap(fireLayers[0], fireBitmaps[3]);
+    bitmap_layer_set_bitmap(fireLayers[1], fireBitmaps[0]);
   }
   
 }
 
 void render_MisterGameAndWatch(MrGameAndWatch* object)
 {
-  if (object->position==0)
-  {
-    bitmap_layer_set_bitmap(s_mgw_layer, s_mgw_left);
-  }
-  else if (object->position==1)
-  {
-    bitmap_layer_set_bitmap(s_mgw_layer, s_mgw_middle);
-  }
-  else if (object->position==2)
-  {
-    bitmap_layer_set_bitmap(s_mgw_layer, s_mgw_right);
-  }
+    bitmap_layer_set_bitmap(s_mgw_layer, mgwBitmaps[object->position]);
 }
 
 static void reset_game_handler(ClickRecognizerRef recognizer, void *context)
@@ -308,14 +293,16 @@ static void click_config_provider(void *context)
 
 void initFire(void)
 {
-  BMPfire0 = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_FIRE0);
-  BMPfire1 = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_FIRE1);
-  BMPfire2 = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_FIRE2);
-  BMPfire3 = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_FIRE3);
-  s_fire_layer0 = bitmap_layer_create(GRect(0, 0, 144, 168));
-  s_fire_layer1 = bitmap_layer_create(GRect(0, 0, 144, 168));
-  bitmap_layer_set_compositing_mode(s_fire_layer0, GCompOpSet);
-  bitmap_layer_set_compositing_mode(s_fire_layer1, GCompOpSet);
+  fireBitmaps[0] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_FIRE0);
+  fireBitmaps[1] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_FIRE1);
+  fireBitmaps[2] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_FIRE2);
+  fireBitmaps[3] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_FIRE3);
+  
+  for (int i=0;i<2;++i)
+  {
+    fireLayers[i] =  bitmap_layer_create(GRect(0, 0, 144, 168));
+    bitmap_layer_set_compositing_mode(fireLayers[i], GCompOpSet);
+  }
 }
 
 void handle_init(void) 
@@ -339,12 +326,13 @@ void handle_init(void)
   
   // Load the images
   s_background = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BG);
-  s_mgw_left = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_MGW_LEFT);
-  s_mgw_middle = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_MGW_MIDDLE);
-  s_mgw_right = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_MGW_RIGHT);
+  mgwBitmaps[0] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_MGW_LEFT);
+  mgwBitmaps[1] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_MGW_MIDDLE);
+  mgwBitmaps[2] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_MGW_RIGHT);
   
-  //s_crash_left = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_CRASH_LEFT);
-  //s_crash_right = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_CRASH_RIGHT);
+  //crashBitmaps[0] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_CRASH_LEFT);
+  //crashBitmaps[1] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_CRASH_MIDDLE);
+  //crashBitmaps[2] = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_CRASH_RIGHT);
   
   // Create the BitmapLayers
   window_set_background_color(my_window,BACKGROUND_COLOUR);
@@ -371,7 +359,7 @@ void handle_init(void)
   
   
   //set mgw based on keys
-  bitmap_layer_set_bitmap(s_mgw_layer, s_mgw_middle);
+  bitmap_layer_set_bitmap(s_mgw_layer, mgwBitmaps[1]);
   
   renderScores();
   
@@ -379,8 +367,10 @@ void handle_init(void)
   layer_add_child(window_get_root_layer(my_window), bitmap_layer_get_layer(s_background_layer));
   layer_add_child(window_get_root_layer(my_window), bitmap_layer_get_layer(s_mgw_layer));
   layer_add_child(window_get_root_layer(my_window), bitmap_layer_get_layer(s_crash_layer));
-  layer_add_child(window_get_root_layer(my_window), bitmap_layer_get_layer(s_fire_layer0));
-  layer_add_child(window_get_root_layer(my_window), bitmap_layer_get_layer(s_fire_layer1));
+  for (int i=0;i<2;++i)
+  {
+    layer_add_child(window_get_root_layer(my_window), bitmap_layer_get_layer(fireLayers[i]));
+  }
   
   layer_add_child(window_get_root_layer(my_window), text_layer_get_layer(scoreLayer));
   layer_add_child(window_get_root_layer(my_window), text_layer_get_layer(nameLayer));
@@ -410,21 +400,23 @@ void handle_deinit(void)
 {
   window_destroy(my_window);
   gbitmap_destroy(s_background);
-  gbitmap_destroy(s_mgw_left);
-  gbitmap_destroy(s_mgw_middle);
-  gbitmap_destroy(s_mgw_right);
-  gbitmap_destroy(s_crash_left);
-  gbitmap_destroy(s_crash_middle);
-  gbitmap_destroy(s_crash_right);
-  gbitmap_destroy(BMPfire0);
-  gbitmap_destroy(BMPfire1);
-  gbitmap_destroy(BMPfire2);
-  gbitmap_destroy(BMPfire3);
+  for (int i=0;i<3;++i)
+  {
+    gbitmap_destroy(mgwBitmaps[i]);
+    gbitmap_destroy(crashBitmaps[i]);
+  }
+  for (int i=0;i<4;++i)
+  {
+    gbitmap_destroy(fireBitmaps[i]);
+  }
   bitmap_layer_destroy(s_background_layer);
   bitmap_layer_destroy(s_mgw_layer);
   bitmap_layer_destroy(s_crash_layer);
-  bitmap_layer_destroy(s_fire_layer0);
-  bitmap_layer_destroy(s_fire_layer1);
+  for (int i=0;i<2;++i)
+  {
+    bitmap_layer_destroy(fireLayers[i]);
+  }
+  
   text_layer_destroy(scoreLayer);
   text_layer_destroy(nameLayer);
   
