@@ -104,14 +104,18 @@ void render(Jumper* object, int i)
 {//need to pass in i to update the correct layer
   if (object->position == object->lowerLimit)
   {//always true when initialised
+    GRect newFrame = GRect(0,0,144,168);
+    
     APP_LOG(APP_LOG_LEVEL_INFO, "Render Jumper in initialPosition");
     if (object->lowerLimit==-1)
     {
+      layer_set_frame(bitmap_layer_get_layer(jumperBitmapLayers[i]), newFrame);
       APP_LOG(APP_LOG_LEVEL_INFO, "initialPosition0");
       bitmap_layer_set_bitmap(jumperBitmapLayers[i], startingImage0);
     }
     else
     {
+      layer_set_frame(bitmap_layer_get_layer(jumperBitmapLayers[i]), newFrame);
       APP_LOG(APP_LOG_LEVEL_INFO, "initialPosition1");
       bitmap_layer_set_bitmap(jumperBitmapLayers[i], startingImage1);
     }
@@ -138,14 +142,6 @@ void renderJumpers()
     {
       APP_LOG(APP_LOG_LEVEL_INFO, "Rendering Live Jumper!");
       render(jumpers[i], i);
-      if (layer_get_hidden(bitmap_layer_get_layer(jumperBitmapLayers[i])))
-      {
-        layer_set_hidden(bitmap_layer_get_layer(jumperBitmapLayers[i]),false);
-      }
-    }
-    else
-    {//jumper is not live, so hide the layer
-      layer_set_hidden(bitmap_layer_get_layer(jumperBitmapLayers[i]),true);
     }
   }
 }
@@ -171,7 +167,7 @@ void spawnNewJumper(void)
     if (!jumpers[i]->live)
     {
       APP_LOG(APP_LOG_LEVEL_INFO, "New Jumper!");
-      if (i%4!=0)
+      if (i==0 || i%4!=0)
       {
         initialise_Jumper(jumpers[i],-1); //means that first "position" will be 0
       }
@@ -222,17 +218,26 @@ void updateWorld()
     game->update = false;
   }
 
-  
   renderFire(game);  
+
+  if ( game->game_time - game->timeOfLastJumperReleaseSpeedIncrease >= game->updateReleaseFrequency)
+  {
+    spawnNewJumper();
+    if(game->updateReleaseFrequency >= game->maximumReleaseFrequency)
+    {
+      game->updateReleaseFrequency -= 5;
+    }  
+    game->timeOfLastJumperReleaseSpeedIncrease = game->game_time;
+  }
   
   
   //handle speed increases
   if ( game->game_time - game->timeOfLastSpeedIncrease >= game->updateSpeedFrequency  )
   {
-    spawnNewJumper();
-    if(game->updateSpeedFrequency >= 50)
+    
+    if(game->speed >= game->maximumSpeed)
     {
-      game->speed -= 1;
+      game->speed -= 2;
     }  
     game->timeOfLastSpeedIncrease = game->game_time;
   } 
@@ -291,9 +296,11 @@ static void reset_game_handler(ClickRecognizerRef recognizer, void *context)
     
     for (int i=0;i<NUMBER_OF_JUMPERS;++i)
     {
+      layer_set_frame(bitmap_layer_get_layer(jumperBitmapLayers[i]), GRect(0, 0, 1, 1));
       initialise_Jumper(jumpers[i],0);
       
     }
+    spawnNewJumper();
     renderJumpers();
     
     app_timer_register(game->delay, updateWorld, NULL); 

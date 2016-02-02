@@ -10,8 +10,12 @@ void initialiseGameState(GameState* state)
   state->crash=0;
   state->timeOfLastUpdate=0;
   state->timeOfLastSpeedIncrease=0;
+  state->updateReleaseFrequency = 200;
+  state->timeOfLastJumperReleaseSpeedIncrease=0;
+  state->maximumReleaseFrequency = 30;
   state->delay = 50;
-  state->updateSpeedFrequency=250; //controls 'difficulty'
+  state->updateSpeedFrequency=150; //controls 'difficulty'
+  state->maximumSpeed=10;
   state->update=false;
   
 }
