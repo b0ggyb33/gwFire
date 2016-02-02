@@ -71,7 +71,7 @@ function sendScore(score)
   
   // Construct URL
   //var url = "http://54.194.206.38:80/json";
-  var url = "thisisatest";//http://54.194.206.38:80/json";
+  var url = "http://54.194.206.38:80/jsonFire";
   
   // Push request to url
   xhrRequest(url, 'POST', scoreToPush,
@@ -85,7 +85,7 @@ function sendScore(score)
 function getUserName()
 {
   //var url = "http://54.194.206.38:80/json";
-  var url = "thisisatest";//"http://54.194.206.38:80/json"; 
+  var url = "http://54.194.206.38:80/jsonFire"; 
   // Push request to url
   xhrRequestForUsername(url, 'POST',
     function(responseText) 

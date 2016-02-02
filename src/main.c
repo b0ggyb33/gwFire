@@ -349,9 +349,9 @@ void initFire(void)
 
 void handle_init(void) 
 { 
-  //app_message_register_outbox_failed(outbox_failed_callback);
-  //app_message_register_outbox_sent(outbox_sent_callback);
-  //app_message_register_inbox_received(inbox_received_callback);
+  app_message_register_outbox_failed(outbox_failed_callback);
+  app_message_register_outbox_sent(outbox_sent_callback);
+  app_message_register_inbox_received(inbox_received_callback);
   
   my_window = window_create();
 
@@ -503,7 +503,7 @@ void handle_deinit(void)
 
 int main(void) 
 {  
-  //app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
+  app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
   handle_init();
   window_set_click_config_provider(my_window, click_config_provider);
   app_timer_register(game->delay, updateWorld, NULL); 
